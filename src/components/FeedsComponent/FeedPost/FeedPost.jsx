@@ -3,14 +3,14 @@ import React from 'react'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
 
-const FeedPost = () => {
+const FeedPost = ({img,avatar,username}) => {
   return (
     <>
-      <PostHeader/>
-      <Box>
-        <Image src='img1.png' />
+      <PostHeader avatar={avatar} username={username}/>
+      <Box my={4} borderRadius={4} overflow={'hidden'}>
+        <Image src={img} />
       </Box>
-      <PostFooter/>
+      <PostFooter username={username} />
     </>
   )
 }
