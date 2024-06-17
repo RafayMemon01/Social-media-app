@@ -1,6 +1,7 @@
 import { Box, Container, Flex } from '@chakra-ui/react'
 
 import FeedBox from '../../components/FeedsComponent/FeedBox/FeedBox.jsx'
+import SuggestionsBox from '../../components/SuggestedBox/SuggestionsBox.jsx'
 
 const HomePage = () => {
   return (
@@ -9,9 +10,9 @@ const HomePage = () => {
         <Box flex={2} py={10} >
           <FeedBox/> 
         </Box>
-        <Box maxWidth={"300px"} flex={3} mr={20} display={{base:"none", lg:"block"}} border={"1px solid red"}>
+        <Box maxWidth={"300px"} flex={3} mr={20} display={{base:"none", lg:"block"}} >
 
-          Suggestions Box
+          <SuggestionsBox/>
         </Box>
 
 
