@@ -2,9 +2,9 @@ import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from '@
 import React, { useState } from 'react'
 import { CommentLogo, NotificationsLogo, UnlikeLogo } from '../../../assets/contants'
 
-const PostFooter = ({username}) => {
+const PostFooter = ({username, isProfilePage}) => {
     const [isLike, setIsLike] = useState(false)
-    const [likeCount, setCountLike] =useState(0)
+    const [likeCount, setCountLike] =useState(678)
 
     const handleLike = () => {
         if(isLike){
@@ -18,7 +18,7 @@ const PostFooter = ({username}) => {
     }
   // eslint-disable-next-line no-console
   return (
-    <Box mb={10}>
+    <Box mb={10} mt={'auto'}>
       <Flex alignItems={'center'} gap={4} w={'full'} pt={0} mb={2} mt={'2'}>
         <Box cursor={'pointer'} onClick={handleLike}>
           {!isLike?(<NotificationsLogo/>):(<UnlikeLogo/>)}
@@ -30,13 +30,18 @@ const PostFooter = ({username}) => {
       <Text fontWeight={600} fontSize={"sm"}>
         {likeCount} likes
       </Text>
+      {!isProfilePage&&(
+        <>
       <Text fontSize={'sm'} fontWeight={700}>
-        {username}__
+        {username}
         <Text as={'span'} fontWeight={400}>feeling good</Text>
       </Text>
       <Text color={'gray'} fontSize={'sm'}>
         View all 1,000 comments
       </Text>
+        </>
+      )}
+
       <Flex alignItems={'center'} gap={2} justifyContent={'space-between'} w={'full'}>
         <InputGroup>
         <Input variant={'flushed'} placeholder='Add a comment...' fontSize='14' />

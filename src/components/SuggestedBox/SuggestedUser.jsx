@@ -24,7 +24,6 @@ const SuggestedUser = ({followers,name, avatar}) => {
       _hover={{color:'white'}}
       onClick={()=>setIsFollowed(!isFollowed)}
       >{isFollowed?"Unfollow":"Follow"}</Button>
-
     </Flex>
   )
 }
