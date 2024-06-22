@@ -1,21 +1,16 @@
 import {
   Box,
-  Button,
   Flex,
   Image,
-  Input,
-  Text,
   VStack,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
+import Login from "./Login";
+import SignUp from "./SignUp";
+import GoogleAuth from "./GoogleAuth";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [inputs, setInputs] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
 
   return (
     <>
@@ -28,41 +23,7 @@ const AuthForm = () => {
             cursor={"pointer"}
             alt="Instagram"
           />
-          <Input
-            value={inputs.email}
-            onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
-            placeholder="Email"
-            type="email"
-            fontSize={14}
-          />
-          <Input
-            value={inputs.password}
-            onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
-            minLength={6}
-            placeholder="Password"
-            type="password"
-            fontSize={14}
-          />
-          {!isLogin ? (
-            <Input
-              value={inputs.confirmPassword}
-              onChange={(e) =>
-                setInputs({ ...inputs, confirmPassword: e.target.value })
-              }
-              minLength={6}
-              placeholder="Password"
-              type="password"
-              fontSize={14}
-            />
-          ) : null}
-          <Button
-            width={"full"}
-            colorScheme="blue"
-            size={"sm"}
-            fontSize={14}
-          >
-            {isLogin ? "Log in" : "Sign Up"}
-          </Button>
+          {isLogin ? <Login/>:<SignUp/>}
 
           {/* Or Text */}
           <Flex
@@ -77,17 +38,7 @@ const AuthForm = () => {
             <Box flex={2} h={"1px"} bg={"gray.400"}></Box>
           </Flex>
 
-          <Flex alignItems={"center"} cursor={"pointer"}>
-            <Image
-              draggable={false}
-              src="/google.png"
-              w={5}
-              alt="Google Logo"
-            />
-            <Text color={"blue.500"} mx={2}>
-              Login in with Google
-            </Text>
-          </Flex>
+          <GoogleAuth/>
         </VStack>
       </Box>
       <Box border={"1px solid gray"} borderRadius={4} padding={5}>
