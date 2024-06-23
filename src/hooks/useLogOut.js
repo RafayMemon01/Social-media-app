@@ -1,8 +1,11 @@
 import { useToast } from '@chakra-ui/react';
 import { useSignOut } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/firebase';
+import useAuthStore from '../store/authstore';
 
 const useLogOut = () => {
+
+    const logout = useAuthStore((state)=>state.logout)
 
     const [signOut, isLoggingOut, error] = useSignOut(auth);
     const showToasr = useToast()
@@ -12,6 +15,7 @@ const useLogOut = () => {
             if(result){
                 localStorage.removeItem("instUser");
                 console.log("Logout")
+                logout()
             }
             } catch (error) {
             showToasr({

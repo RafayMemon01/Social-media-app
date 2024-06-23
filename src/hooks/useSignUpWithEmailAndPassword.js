@@ -3,11 +3,13 @@ import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { setDoc } from 'firebase/firestore';
 import { doc } from 'firebase/firestore';
 import { useToast } from '@chakra-ui/react';
+import useAuthStore from "../store/authstore";
 
 const useSignUpWithEmailAndPassword = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
     const showToast = useToast()
+    const loginUser = useAuthStore((state)=>state.login)
 
   const signUp = async (inputs) => {
     if (
@@ -51,6 +53,7 @@ const useSignUpWithEmailAndPassword = () => {
         }
         await setDoc(doc(fireStore, "users", newUser.user.uid), userDoc);
         localStorage.setItem("instUser",JSON.stringify(userDoc))
+        loginUser(userDoc)
         showToast({
             description:`Welcome ${inputs.userName}`,
             status:'success',
