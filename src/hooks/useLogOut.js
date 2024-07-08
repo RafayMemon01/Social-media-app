@@ -14,7 +14,6 @@ const useLogOut = () => {
             const result = await signOut();
             if(result){
                 localStorage.removeItem("instUser");
-                console.log("Logout")
                 logout()
             }
             } catch (error) {

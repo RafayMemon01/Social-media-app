@@ -6,9 +6,14 @@ import PageLayout from './layouts/PageLayout/PageLayout'
 import ProfilePage from './pages/ProfilePage/ProfilePage'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from './firebase/firebase'
+import { useEffect } from 'react'
 
 function App() {
   const [authUser] = useAuthState(auth)
+  useEffect(() => {
+    console.log('%cStop!', 'color: red; font-size: 40px; font-weight: bold;')
+    console.log('%cThis is a browser feature intended for developers. If someone told you to copy and paste something here to enable a feature or "hack" an account, it is a scam and will give them access to your account.', 'color: black; font-size: 20px;')
+  }, [])
 
   return (
     <PageLayout>
