@@ -24,18 +24,23 @@ const useFollowUser = (userId) => {
         followings: isFollowings ? arrayRemove(userId) : arrayUnion(userId),
       });
       await updateDoc(userToFollowRef, {
-        followers: isFollowings ? arrayRemove(authUser?.uid) : arrayUnion(authUser?.uid),
+        followers: isFollowings
+          ? arrayRemove(authUser?.uid)
+          : arrayUnion(authUser?.uid),
       });
 
       if (isFollowings) {
         //unFollow
         setAuthUser({
-            ...authUser,
-            followings: authUser?.followings.filter((uid) => uid !== userId),
-          });
+          ...authUser,
+          followings: authUser?.followings.filter((uid) => uid !== userId),
+        });
+        if (userProfile)
           setUserProfile({
             ...userProfile,
-            followers: userProfile.followers.filter((uid) => uid !== authUser?.uid),
+            followers: userProfile.followers.filter(
+              (uid) => uid !== authUser?.uid
+            ),
           });
         localStorage.setItem(
           "instUser",
@@ -51,10 +56,11 @@ const useFollowUser = (userId) => {
           ...authUser,
           followings: [...authUser?.followings, userId],
         });
-        setUserProfile({
-          ...userProfile,
-          followers: [...userProfile.followers, authUser?.uid],
-        });
+        if (userProfile)
+          setUserProfile({
+            ...userProfile,
+            followers: [...userProfile.followers, authUser?.uid],
+          });
         localStorage.setItem(
           "instUser",
           JSON.stringify({

@@ -11,7 +11,7 @@ const SidebarItems = () => {
 			<Search />
 			<Notifications />
 			<CreatePost />
-			<ProfileLink />
+			{/* <ProfileLink /> */}
 		</>
 	);
 };
