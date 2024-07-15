@@ -5,9 +5,11 @@ import { FaComment } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import Comment from "../Comment/Comment";
 import PostFooter from "../FeedsComponent/FeedPost/PostFooter";
+import userProfileStore from "../../store/userProfileStore";
 
-const ProfilePost = ({ img }) => {
+const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const userProfile = userProfileStore((state)=>state.userProfile)
   return (
     <>
       <GridItem
@@ -37,19 +39,19 @@ const ProfilePost = ({ img }) => {
             <Flex>
               <AiFillHeart size={20} />
               <Text fontWeight={"bold"} ml={2}>
-                10
+                {post.likes.length}
               </Text>
             </Flex>
             <Flex>
               <FaComment size={20} />
               <Text fontWeight={"bold"} ml={2}>
-                3
+                {post.comments.length}
               </Text>
             </Flex>
           </Flex>
         </Flex>
         <Image
-          src={img}
+          src={post.imageURL}
           alt="profile post"
           h={"100%"}
           w={"100%"}
@@ -76,14 +78,14 @@ const ProfilePost = ({ img }) => {
                 borderColor={'whiteAlpha.300'}
                 flex={1.5}
                 >
-                    <Image src={img} alt="Profile Post" />
+                    <Image src={post.imageURL} alt="Profile Post" />
                 </Box>
                 <Flex flex={1} flexDirection={'column'} px={10} display={{base:'none',md:'flex'}}>
                     <Flex justifyContent={'space-between'}>
 
                     <Flex justifyContent={'space-between'} alignItems={'center'} gap={2}>
-                        <Avatar src="/profilepic.png"  size={'sm'} name="RHM Web Developer"/>
-                        <Text fontSize={12} fontWeight={'bold'}>RHM WEB SOLuTIONS</Text>
+                        <Avatar src={userProfile.profilePicURL}  size={'sm'} name="RHM Web Developer"/>
+                        <Text fontSize={12} fontWeight={'bold'}>{userProfile.userName}</Text>
                     </Flex>
                     <Box _hover={{bg:'whiteAlpha.300',color:'red.600'}} borderRadius={4} p={1}>
                         <MdDelete size={20} cursor={'pointer'}/>
