@@ -1,5 +1,10 @@
-import { arrayRemove, arrayUnion, deleteDoc, updateDoc } from 'firebase/firestore'
-import { doc } from 'firebase/firestore'
+import {
+  arrayRemove,
+  arrayUnion,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { doc } from "firebase/firestore";
 import {
   Avatar,
   Box,
@@ -26,41 +31,42 @@ import PostFooter from "../FeedsComponent/FeedPost/PostFooter";
 import userProfileStore from "../../store/userProfileStore";
 import useAuthStore from "../../store/authstore";
 import useShowToast from "../../hooks/useShowToast";
-import { fireStore, storage } from '../../firebase/firebase';
-import usePostStore from '../../store/postStore';
-import { deleteObject, ref } from 'firebase/storage';
+import { fireStore, storage } from "../../firebase/firebase";
+import usePostStore from "../../store/postStore";
+import { deleteObject, ref } from "firebase/storage";
+import Caption from "../Comment/Caption";
 
 const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const userProfile = userProfileStore((state) => state.userProfile);
   const authUser = useAuthStore((state) => state.user);
-  const deletePost = usePostStore((state)=>state.deletePost)
-  const decrementPostsCount = userProfileStore((state)=> state.deletePost)
+  const deletePost = usePostStore((state) => state.deletePost);
+  const decrementPostsCount = userProfileStore((state) => state.deletePost);
   const showToast = useShowToast();
-  const [isDeleting, setIsDeleting] = useState(false)
-  const handleDeletePost = async ()=>{
+  const [isDeleting, setIsDeleting] = useState(false);
+  const handleDeletePost = async () => {
     if (!window.confirm("Are you sure you want to delete this post?")) {
       return;
     }
     try {
-     setIsDeleting(true)
-     const imageRef = ref(storage,`post/${post.id}`) 
-     await deleteObject(imageRef)
-     const userRef = doc(fireStore, "users", userProfile.uid)
-     await deleteDoc(doc(fireStore, "posts", post.id))
-     await updateDoc(userRef,{
-      posts: arrayRemove(post.id)
-     })
-     deletePost(post.id)
-     decrementPostsCount(post.id)
+      setIsDeleting(true);
+      const imageRef = ref(storage, `post/${post.id}`);
+      await deleteObject(imageRef);
+      const userRef = doc(fireStore, "users", userProfile.uid);
+      await deleteDoc(doc(fireStore, "posts", post.id));
+      await updateDoc(userRef, {
+        posts: arrayRemove(post.id),
+      });
+      deletePost(post.id);
+      decrementPostsCount(post.id);
 
-     showToast("Post Deleted","","success")
+      showToast("Post Deleted", "", "success");
     } catch (error) {
-      showToast("Error",error.message,"error")
-    }finally{
-      setIsDeleting(false)
+      showToast("Error", error.message, "error");
+    } finally {
+      setIsDeleting(false);
     }
-  }
+  };
 
   return (
     <>
@@ -173,6 +179,12 @@ const ProfilePost = ({ post }) => {
                     </Button>
                   )}
                 </Flex>
+                {post.caption&&(
+                  <>
+                    <Divider my={2} bg={"gray.500"} />
+                    <Caption post={post} />
+                  </>)
+                }
                 <Divider my={4} bg={"gray.500"} />
                 <VStack
                   w={"full"}
@@ -181,27 +193,12 @@ const ProfilePost = ({ post }) => {
                   maxH={"350px"}
                   overflowY={"auto"}
                 >
-                  <Comment
-                    createdAt="1d ago"
-                    username="RHM Web"
-                    profilePic="/profilepic.png"
-                    comment="This is a comment"
-                  />
-                  <Comment
-                    createdAt="1d ago"
-                    username="RHM Web"
-                    profilePic="/profilepic.png"
-                    comment="This is a comment"
-                  />
-                  <Comment
-                    createdAt="1d ago"
-                    username="RHM Web"
-                    profilePic="/profilepic.png"
-                    comment="This is a comment"
-                  />
+                  {post.comments.map((comment) => (
+                    <Comment key={comment.id} comment={comment} />
+                  ))}
                 </VStack>
                 <Divider my={4} bg={"gray.800"} />
-                <PostFooter isProfilePage={true} />
+                <PostFooter post={post} isProfilePage={true} />
               </Flex>
             </Flex>
           </ModalBody>

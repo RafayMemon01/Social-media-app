@@ -1,15 +1,15 @@
-import { Avatar, Flex, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react";
+import React from "react";
 import { formatDistanceToNow } from "date-fns";
-import useGetUserProfileById from "../../hooks/useGetUserProfileById";
+import { Avatar, Flex,Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import userProfileStore from "../../store/userProfileStore";
+
 const formatDate = (timestamp) => {
   if (!timestamp) return "";
   return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
 };
-
-const Comment = ({ comment }) => {
-  const { isLoading, userProfile } = useGetUserProfileById(comment?.createdBy);
-  if (isLoading) return <CommentSkeleton />;
+const Caption = ({post}) => {
+  const userProfile = userProfileStore((state) => state.userProfile);
   return (
     <Flex gap={4}>
       <Link to={`/${userProfile?.userName}`}>
@@ -26,25 +26,14 @@ const Comment = ({ comment }) => {
               {userProfile?.userName}
             </Text>
           </Link>
-          <Text fontSize={14}>{comment?.comment}</Text>
+          <Text fontSize={14}>{post.caption}</Text>
         </Flex>
         <Text fontSize={12} color={"gray"}>
-          {formatDate(comment?.createdOn)}
+          {formatDate(post?.createdAt)}
         </Text>
       </Flex>
     </Flex>
   );
 };
 
-export default Comment;
-const CommentSkeleton = () => {
-  return (
-    <Flex gap={4} w={"full"} alignItems={"center"}>
-      <SkeletonCircle h={10} w="10" />
-      <Flex gap={1} flexDir={"column"}>
-        <Skeleton height={2} width={100} />
-        <Skeleton height={2} width={50} />
-      </Flex>
-    </Flex>
-  );
-};
+export default Caption;
