@@ -1,4 +1,4 @@
-import {  Box, Button, Flex, Link, Tooltip } from "@chakra-ui/react";
+import {  Box, Button, Flex, Link, Tooltip,Image } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { InstagramLogo, InstagramMobileLogo } from "../../assets/contants";
 
@@ -28,7 +28,8 @@ const Sidebar = () => {
           display={{ base: "none", md: "block" }}
           cursor="pointer"
         >
-          <InstagramLogo />
+          {/* <InstagramLogo /> */}
+          <Image src={"/Untitled design (3).png"}/>
         </Link>
         <Link
           to={"/"}
@@ -42,7 +43,8 @@ const Sidebar = () => {
           w={10}
           cursor="pointer"
         >
-          <InstagramMobileLogo />
+          {/* <InstagramMobileLogo /> */}
+          <Image width={"200px"} src="/favicon.ico"/>
         </Link>
         <Flex direction={"column"} gap={5} cursor={"pointer"}>
           <SidebarItems />
