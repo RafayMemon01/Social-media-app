@@ -6,6 +6,8 @@ import { fireStore } from "../firebase/firebase";
 import { arrayUnion } from "firebase/firestore";
 import usePostStore from "../store/postStore";
 import { doc } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const usePostComment = () => {
   const showToast = useShowToast();
@@ -20,6 +22,7 @@ const usePostComment = () => {
     }
     setIsCommenting(true);
     const newComment = {
+      id: uuidv4(),
       comment,
       createdBy: authUser?.uid,
       createdOn: Date.now(),

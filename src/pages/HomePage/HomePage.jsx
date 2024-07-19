@@ -4,6 +4,7 @@ import FeedBox from '../../components/FeedsComponent/FeedBox/FeedBox.jsx'
 import SuggestionsBox from '../../components/SuggestedBox/SuggestionsBox.jsx'
 
 const HomePage = () => {
+
   return (
     <Container maxW={"container.lg"}>
       <Flex gap={20}>

@@ -39,19 +39,19 @@ const CreatePost = () => {
   const [caption, setCaption] = useState("");
   const imageRef = useRef(null);
   const { selectedFile, handleImageChange, setSelectedFile } = usePreviewImg();
-  const  showToast  = useShowToast();
-  const {handleCreatePost,isLoading} = useCreatePost();
+  const showToast = useShowToast();
+  const { handleCreatePost, isLoading } = useCreatePost();
 
-  const handlePostCreation = async ()=>{
+  const handlePostCreation = async () => {
     try {
-        await handleCreatePost(selectedFile,caption);
-        onClose();
-        setCaption("");
-        setSelectedFile(null);
+      await handleCreatePost(selectedFile, caption);
+      onClose();
+      setCaption("");
+      setSelectedFile(null);
     } catch (error) {
-      showToast("Error",error.message,"error")
+      showToast("Error", error.message, "error");
     }
-  }
+  };
   return (
     <>
       <Tooltip
@@ -125,7 +125,9 @@ const CreatePost = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={handlePostCreation} isLoading={isLoading} mr={3}>Post</Button>
+            <Button onClick={handlePostCreation} isLoading={isLoading} mr={3}>
+              Post
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -142,11 +144,12 @@ function useCreatePost() {
   const authUser = useAuthStore((state) => state.user);
   const { createPost } = usePostStore();
   const { addPost } = userProfileStore();
+  const { userProfile } = userProfileStore();
 
   const { pathname } = useLocation();
 
   const handleCreatePost = async (selectedFile, caption) => {
-    if(isLoading) return;
+    if (isLoading) return;
     if (!selectedFile) throw new Error("No file selected");
     setIsLoading(true);
 
@@ -160,7 +163,7 @@ function useCreatePost() {
 
     try {
       const postDocRef = await addDoc(collection(fireStore, "posts"), newPost);
-      const userDoc =  doc(fireStore, "users", authUser.uid);
+      const userDoc = doc(fireStore, "users", authUser.uid);
       const imageRef = ref(storage, `post/${postDocRef.id}`);
 
       await updateDoc(userDoc, {
@@ -171,14 +174,9 @@ function useCreatePost() {
       const downloadURL = await getDownloadURL(imageRef);
       await updateDoc(postDocRef, { imageURL: downloadURL });
       newPost.imageURL = downloadURL;
-      addPost({
-        ...newPost,
-        id: postDocRef.id,
-      });
-      createPost({
-        ...newPost,
-        id: postDocRef.id,
-      });
+
+      if(userProfile.uid === authUser.uid) addPost({...newPost,id: postDocRef.id,});
+      if(pathname !== '/' && userProfile.uid === authUser.uid ) createPost({...newPost, id: postDocRef.id,});
 
       showToast("Success", "Post created successfully", "success");
     } catch (error) {
@@ -187,7 +185,6 @@ function useCreatePost() {
       setIsLoading(false);
     }
   };
-
 
   return { handleCreatePost, isLoading };
 }

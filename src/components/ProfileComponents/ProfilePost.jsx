@@ -97,7 +97,7 @@ const ProfilePost = ({ post }) => {
             <Flex>
               <AiFillHeart size={20} />
               <Text fontWeight={"bold"} ml={2}>
-                {post.likes.length}
+                {post?.likes.length}
               </Text>
             </Flex>
             <Flex>
@@ -142,7 +142,7 @@ const ProfilePost = ({ post }) => {
                 justifyContent={"center"}
                 alignItems={"center"}
               >
-                <Image src={post.imageURL} alt="Profile Post" />
+                <Image src={post?.imageURL} alt="Profile Post" />
               </Flex>
               <Flex
                 flex={1}
@@ -157,12 +157,12 @@ const ProfilePost = ({ post }) => {
                     gap={2}
                   >
                     <Avatar
-                      src={userProfile.profilePicURL}
+                      src={userProfile?.profilePicURL}
                       size={"sm"}
                       name="RHM Web Developer"
                     />
                     <Text fontSize={12} fontWeight={"bold"}>
-                      {userProfile.userName}
+                      {userProfile?.userName}
                     </Text>
                   </Flex>
                   {authUser?.uid === userProfile?.uid && (
@@ -193,7 +193,7 @@ const ProfilePost = ({ post }) => {
                   maxH={"350px"}
                   overflowY={"auto"}
                 >
-                  {post.comments.map((comment) => (
+                  {post?.comments.map((comment) => (
                     <Comment key={comment.id} comment={comment} />
                   ))}
                 </VStack>
