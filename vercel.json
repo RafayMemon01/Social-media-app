@@ -1,3 +1,10 @@
 {
-    "rewrites":[{ "source":"/(.*)","destination":"/"  }]
+    "rewrites":[{ "source":"/(.*)","destination":"/"  }],
+    "redirects": [
+    {
+      "source": "/google512a2761b37455bb.html",
+      "destination": "/google512a2761b37455bb.html",
+      "statusCode": 200
+    }
+  ]
 }

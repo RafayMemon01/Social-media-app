@@ -6,13 +6,39 @@ import {
   SkeletonCircle,
   VStack,
   Text,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Button,
+  ModalFooter,
 } from "@chakra-ui/react";
 import FeedPost from "../FeedPost/FeedPost";
 import useGetFeedPosts from "../../../hooks/useGetFeedPosts";
+// import SuggestionsBox from "../../SuggestedBox/SuggestionsBox";
+import useAuthStore from "../../../store/authstore";
+import { useEffect } from "react";
 
 const FeedBox = () => {
   const { isLoading, posts } = useGetFeedPosts();
+  const authUser = useAuthStore((state)=>state.user);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  useEffect(() => {
+    if (!isLoading && authUser.followings < 2) {
+      console.log("Load complete, checking followings...");
+      const timer = setTimeout(() => {
+        console.log("Few followings detected, opening modal...");
+        onOpen();
+      }, 7000); // 7 seconds delay
+      return () => clearTimeout(timer); // Cleanup timeout if the component unmounts
+    }
+  }, [isLoading, authUser.followings, onOpen]);
+
+
   return (
+    <>
     <Container maxWidth={"container.sm"} py={10} px={2}>
       {isLoading &&
         [0, 1, 2].map((_, idx) => (
@@ -44,9 +70,33 @@ const FeedBox = () => {
             Stop Coding and Go Make Some!!
           </Text>
         </Flex>
+        
         </>
       )}
+      
+      
+        
+      
     </Container>
+    <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInTop">
+    <ModalOverlay />
+    <ModalContent
+    bg={'black'}
+    border={'1px solid gray'}
+    maxW={'480px'}
+    >
+      <ModalHeader>Few Followers</ModalHeader>
+      <ModalBody>
+        <Text>Looks like you have few followers. Make more friends to see a better feed.</Text>
+      </ModalBody>
+      <ModalFooter>
+        <Button colorScheme="blue" mr={3} onClick={onClose}>
+          Close
+        </Button>
+      </ModalFooter>
+    </ModalContent>
+  </Modal>
+  </>
   );
 };
 
