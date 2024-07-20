@@ -4,7 +4,7 @@ import useAuthStore from "../../store/authstore";
 import { Link } from "react-router-dom";
 
 
-const SuggestedUser = ({ user, setUser }) => {
+const SuggestedUser = ({ user ,setUser }) => {
   const {isUpdating, isFollowings, handleFollowUser} = useFollowUser(user?.uid)
   const authUser = useAuthStore(state => state.user)
 

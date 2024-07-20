@@ -32,7 +32,6 @@ const useGetUserProfileById = (userId) => {
   return {
     isLoading,
     userProfile,
-    setUserProfile,
   };
 };
 
