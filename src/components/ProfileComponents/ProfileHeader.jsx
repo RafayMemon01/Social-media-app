@@ -31,7 +31,7 @@ const ProfileHeader = () => {
 
   const handleOpenFollowers = () => {
     setModalTitle("Followers");
-    setModalUserIds(userProfile.followers);
+    setModalUserIds(userProfile?.followers);
     onFollowersOpen();
   };
 

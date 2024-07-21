@@ -10,8 +10,9 @@ const SignUp = () => {
     userName: "",
     password: "",
   });
-  const {loading, error, signUp} = useSignUpWithEmailAndPassword()
+  const { loading, error, signUp } = useSignUpWithEmailAndPassword();
   const [showPassword, setShowPassword] = useState(false);
+
   return (
     <>
       <Input
@@ -19,14 +20,14 @@ const SignUp = () => {
         onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
         placeholder="Email"
         type="email"
-        size={"sm"}
+        size="sm"
         fontSize={14}
       />
       <Input
         value={inputs.userName}
         onChange={(e) => setInputs({ ...inputs, userName: e.target.value })}
         placeholder="Username"
-        size={"sm"}
+        size="sm"
         type="text"
         fontSize={14}
       />
@@ -35,7 +36,7 @@ const SignUp = () => {
         onChange={(e) => setInputs({ ...inputs, fullName: e.target.value })}
         placeholder="Full Name"
         type="text"
-        size={"sm"}
+        size="sm"
         fontSize={14}
       />
       <InputGroup>
@@ -45,7 +46,7 @@ const SignUp = () => {
           minLength={6}
           placeholder="Password"
           type={showPassword ? "text" : "password"}
-          size={"sm"}
+          size="sm"
           fontSize={14}
         />
         <InputRightElement h="full">
@@ -58,15 +59,14 @@ const SignUp = () => {
           </Button>
         </InputRightElement>
       </InputGroup>
-      {error&&(
+      {error && (
         <Alert status="error" fontSize={12} p={2} borderRadius={4}>
-            <AlertIcon fontSize={11}/>
-            User already exist with this email
+          <AlertIcon fontSize={11} />
+          User already exists with this email
         </Alert>
-        )}
-
+      )}
       <Button isLoading={loading} onClick={() => signUp(inputs)} width={"full"} colorScheme="blue" size={"sm"} fontSize={14}>
-        {"Sign Up"}
+        Sign Up
       </Button>
     </>
   );

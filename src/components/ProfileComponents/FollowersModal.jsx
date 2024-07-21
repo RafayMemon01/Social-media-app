@@ -33,7 +33,9 @@ const FollowersModal = ({ isOpen, onClose, title, userIds }) => {
       setLoading(true);
       setProfiles([]);
       try {
-        const profilePromises = userIds.map((userId) => getUserProfileById(userId));
+        const profilePromises = userIds.map((userId) =>
+          getUserProfileById(userId)
+        );
         const fetchedProfiles = await Promise.all(profilePromises);
         setProfiles(fetchedProfiles);
       } catch (error) {
@@ -43,15 +45,20 @@ const FollowersModal = ({ isOpen, onClose, title, userIds }) => {
       }
     };
 
-    if (isOpen && userIds.length > 0) {
+    if (isOpen && userIds.length > -1) {
       fetchProfiles();
     }
   }, [isOpen, userIds]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="md">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="md"
+      motionPreset="slideInBottom"
+    >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bg={"black"} border={"1px solid gray"} maxW={"480px"}>
         <ModalHeader>{title}</ModalHeader>
         <ModalBody>
           <VStack spacing={4}>
@@ -59,7 +66,11 @@ const FollowersModal = ({ isOpen, onClose, title, userIds }) => {
               <Spinner />
             ) : profiles.length > 0 ? (
               profiles.map((profile) => (
-                <SuggestedUser key={profile.uid} user={profile} setUser={setProfiles} />
+                <SuggestedUser
+                  key={profile.uid}
+                  user={profile}
+                  setUser={setProfiles}
+                />
               ))
             ) : (
               <Text>No users found.</Text>

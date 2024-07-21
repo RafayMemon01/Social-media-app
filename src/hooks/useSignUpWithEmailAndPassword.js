@@ -1,25 +1,17 @@
 import { auth, fireStore } from "../firebase/firebase";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { Firestore, collection, query, setDoc } from "firebase/firestore";
-import { doc } from "firebase/firestore";
+import { collection, query, setDoc, where, getDocs, doc } from "firebase/firestore";
 import { useToast } from "@chakra-ui/react";
 import useAuthStore from "../store/authstore";
-import { where } from 'firebase/firestore';
-import { getDocs } from 'firebase/firestore';
+import { sendEmailVerification } from "firebase/auth";
 
 const useSignUpWithEmailAndPassword = () => {
-  const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword, , loading, error] = useCreateUserWithEmailAndPassword(auth);
   const showToast = useToast();
   const loginUser = useAuthStore((state) => state.login);
 
   const signUp = async (inputs) => {
-    if (
-      !inputs.email ||
-      !inputs.password ||
-      !inputs.userName ||
-      !inputs.fullName
-    ) {
+    if (!inputs.email || !inputs.password || !inputs.userName || !inputs.fullName) {
       showToast({
         description: "Please fill all the fields",
         status: "error",
@@ -28,7 +20,7 @@ const useSignUpWithEmailAndPassword = () => {
       return;
     }
 
-    const userRef = collection(fireStore,"users")
+    const userRef = collection(fireStore, "users");
     const q = query(userRef, where("userName", "==", inputs.userName));
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
@@ -39,41 +31,36 @@ const useSignUpWithEmailAndPassword = () => {
       });
       return;
     }
+
     try {
-      const newUser = await createUserWithEmailAndPassword(
-        inputs.email,
-        inputs.password
-      );
-      if (!newUser) {
-        showToast({
-          description: "error with creating user",
-          status: "error",
-          title: "Error",
-        });
-        return;
-      }
-      if (newUser) {
-        const userDoc = {
-          uid: newUser.user.uid,
-          email: inputs.email,
-          fullName: inputs.fullName,
-          userName: inputs.userName,
-          bio: "",
-          profilePicURL: "",
-          followers: [],
-          followings: [],
-          posts: [],
-          createdAt: Date.now(),
-        };
-        await setDoc(doc(fireStore, "users", newUser.user.uid), userDoc);
-        localStorage.setItem("instUser", JSON.stringify(userDoc));
-        loginUser(userDoc);
-        showToast({
-          description: `Welcome ${inputs.userName}`,
-          status: "success",
-          title: "Success",
-        });
-      }
+      const userCredential = await createUserWithEmailAndPassword(inputs.email, inputs.password);
+      const user = userCredential.user;
+      
+      await sendEmailVerification(user);
+
+      const userDoc = {
+        uid: user.uid,
+        email: inputs.email,
+        fullName: inputs.fullName,
+        userName: inputs.userName,
+        bio: "",
+        profilePicURL: "",
+        followers: [],
+        followings: [],
+        posts: [],
+        createdAt: Date.now(),
+        emailVerified: user.emailVerified,
+      };
+
+      await setDoc(doc(fireStore, "users", user.uid), userDoc);
+      localStorage.setItem("instUser", JSON.stringify(userDoc));
+      loginUser(userDoc);
+
+      showToast({
+        description: `Verification email sent to ${inputs.email}. Please verify your email before logging in.`,
+        status: "success",
+        title: "Success",
+      });
     } catch (error) {
       showToast({
         description: "Unknown error, retry later",
@@ -82,6 +69,7 @@ const useSignUpWithEmailAndPassword = () => {
       });
     }
   };
+
   return { loading, error, signUp };
 };
 

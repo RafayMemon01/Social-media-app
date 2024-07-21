@@ -37,7 +37,6 @@ const usePostComment = () => {
       addComment(postId, newComment);
     } catch (error) {
       showToast("Error", error.message, "error");
-      console.log(error);
     } finally{
         setIsCommenting(false)}
   };

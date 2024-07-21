@@ -7,7 +7,7 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const {loading, error, login} = useLogin()
+  const { loading, error, login } = useLogin();
 
   return (
     <>
@@ -15,8 +15,7 @@ const Login = () => {
         value={inputs.email}
         onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
         placeholder="Email"
-        size={'sm'}
-
+        size="sm"
         type="email"
         fontSize={14}
       />
@@ -24,21 +23,26 @@ const Login = () => {
         value={inputs.password}
         onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
         minLength={6}
-        size={'sm'}
-
+        size="sm"
         placeholder="Password"
         type="password"
         fontSize={14}
       />
-      {error&&(
+      {error && (
         <Alert status="error" fontSize={12} p={2} borderRadius={4}>
-            <AlertIcon fontSize={11}/>
-            Some things went wrong!
+          <AlertIcon fontSize={11} />
+          {error}
         </Alert>
-        )}
-
-      <Button width={"full"} onClick={()=>{login(inputs)}} isLoading={loading} colorScheme="blue" size={"sm"} fontSize={14}>
-        {"Log in"}
+      )}
+      <Button
+        width="full"
+        onClick={() => login(inputs)}
+        isLoading={loading}
+        colorScheme="blue"
+        size="sm"
+        fontSize={14}
+      >
+        Log in
       </Button>
     </>
   );
